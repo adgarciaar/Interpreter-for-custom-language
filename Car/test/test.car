@@ -1,0 +1,19 @@
+def_var myvar
+echo "impresion"
+def_var myVar2
+myvar := 5.7
+echo myvar
+myVar2 := 25
+echo myVar2
+myVar2 := 56
+echo myVar2
+echo 5 + 2
+echo 9*2
+echo 2+2*4
+echo 4-2
+echo 24/2
+echo 24/2+2
+echo 2+60/4
+echo -43.5
+myVar2 := -67
+echo myVar2
