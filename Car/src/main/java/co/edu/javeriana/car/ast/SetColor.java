@@ -1,0 +1,46 @@
+package co.edu.javeriana.car.ast;
+
+import java.util.Map;
+
+import co.edu.javeriana.car.Car;
+
+public class SetColor implements ASTNode {
+	
+	private ASTNode color;
+	private ASTNode transparency;
+	private Car myCar;
+
+	public SetColor(ASTNode color, ASTNode transparency, Car myCar) {
+		super();
+		this.color = color;
+		this.transparency = transparency;
+		this.myCar = myCar;
+	}
+
+	@Override
+	public Object execute(Map<String, Object> symbolTable) {
+		
+		if( !(this.transparency.execute(symbolTable) instanceof Float) ){	
+			System.out.println("Error: el valor de transparencia debe ser numérico");
+			System.exit(1);
+		}
+		
+		if( (float)this.transparency.execute(symbolTable) < 0 
+				|| (float)this.transparency.execute(symbolTable) > 1 ){
+			System.out.println("Error: el valor de transparencia debe estar entre 0.0 y 1.0");
+			System.exit(1);
+		}
+		
+		String sColor = (String)this.color.execute(symbolTable);
+		
+		float red = (float)Integer.valueOf( sColor.substring( 1, 3 ), 16 );
+		float green = (float)Integer.valueOf( sColor.substring( 3, 5 ), 16 );
+		float blue = (float)Integer.valueOf( sColor.substring( 5, 7 ), 16 );
+		float alpha = (float)this.transparency.execute(symbolTable);
+		
+		this.myCar.color( red, green, blue, alpha*255 );
+		
+		return null;
+	}
+
+}

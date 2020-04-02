@@ -1,19 +1,30 @@
-def_var myvar
-echo "impresion"
-def_var myVar2
-myvar := 5.7
-echo myvar
-myVar2 := 25
-echo myVar2
-myVar2 := 56
-echo myVar2
-echo 5 + 2
-echo 9*2
-echo 2+2*4
-echo 4-2
-echo 24/2
-echo 24/2+2
-echo 2+60/4
-echo -43.5
-myVar2 := -67
-echo myVar2
+proc turncw_n_move(angle, dist)
+	turn_rt angle
+	move_fw dist
+end
+proc makeHorizontalLine()
+	set_rgba #000000,0.0
+	move_fw 50
+	turn_lt 180
+	set_rgba #ffffff,1.0
+	move_fw 100
+	turn_lt 180
+	set_rgba #000000,0.0
+	move_fw 50
+end
+def_var a := 0
+while (a < 3)
+	echo a
+	a := a + 1
+endwhile
+if (a=3)
+	echo "hola"
+endif
+makeHorizontalLine()
+set_rgba #ffffff,1
+turn_rt 90
+move_fw 200
+turncw_n_move(45,50)
+turncw_n_move(45,50)
+turncw_n_move(45,50)
+turncw_n_move(45,50)
