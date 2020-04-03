@@ -27,4 +27,56 @@ move_fw 200
 turncw_n_move(45,50)
 turncw_n_move(45,50)
 turncw_n_move(45,50)
-turncw_n_move(45,50)
+turncw_n_move(45,150)
+def_var myColor1 := #ff8f00
+def_var myColor2 := #004dff
+def_var myStr := "testing"
+if(a<>2)
+	set_rgba myColor1,1
+else
+	set_rgba myColor2,1.0
+endif
+if(true)
+endif
+move_fw 300
+def_var myvar := 200
+move_bk myvar
+def_var x
+x := 90
+turn_lt x
+move_fw 50
+proc test(x, y)
+	turn_lt x
+	move_fw y
+end
+def_var a := -1
+while (a < 3)
+	test(65, 100)
+	a := a + 1
+endwhile
+def_var a := -3
+def_var b := 345
+def_var c := 160
+if (a < 2)
+	echo "dentro de ciclo"
+	a := a + 1
+	b := b - 1
+	def_var c:= 54
+	c := c - 6
+	echo c
+endif
+echo b
+def_var e := 1032
+def_var f := 2020
+proc myProcedure(e)
+	echo e
+	e := 78
+	echo e
+	f := 45
+end
+myProcedure(4)
+echo e
+echo f
+echo (true and 5<>3) or (true and false) or (not true or false)
+echo 5-2+2-1+6*(4+2/1)
+echo 7823+89*5/3*(3+2+2*(1+3472/(324*89/(3-6))))

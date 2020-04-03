@@ -123,12 +123,12 @@ set_color returns [ASTNode node]:
 	
 expression returns [ASTNode node]:
 	t1 = and_operator { $node = $t1.node; }
-	( OR t2 = and_operator { $node = new Or($node, $t2.node); } )*
+	(OR t2 = and_operator { $node = new Or($node, $t2.node); } )*
 	;
 	
 and_operator returns [ASTNode node]:
 	t1 = not_operator { $node = $t1.node; }
-	( AND t2 = not_operator { $node = new And($node,$t2.node); } )*	
+	(AND t2 = not_operator { $node = new And($node,$t2.node); } )*	
 	;
 	
 not_operator returns [ASTNode node]:
@@ -138,28 +138,28 @@ not_operator returns [ASTNode node]:
 comparison returns [ASTNode node]:
 	t1 = plus_minus { $node = $t1.node; }
 	( 
-		(EQ t2 = plus_minus { $node = new EqualThan($node, $t2.node); } )*
-		| (NEQ t2 = plus_minus { $node = new NotEqualThan($node, $t2.node); } )*
-		| (GT t2 = plus_minus { $node = new GreaterThan($node, $t2.node); } )*
-		| (LT t2 = plus_minus { $node = new LessThan($node, $t2.node); } )*
-		| (GEQ t2 = plus_minus { $node = new GreaterEqualThan($node, $t2.node); } )*
-		| (LEQ t2 = plus_minus { $node = new LessEqualThan($node, $t2.node); } )*
-	)
+		EQ t2 = plus_minus { $node = new EqualThan($node, $t2.node); }
+		| NEQ t2 = plus_minus { $node = new NotEqualThan($node, $t2.node); }
+		| GT t2 = plus_minus { $node = new GreaterThan($node, $t2.node); }
+		| LT t2 = plus_minus { $node = new LessThan($node, $t2.node); }
+		| GEQ t2 = plus_minus { $node = new GreaterEqualThan($node, $t2.node); }
+		| LEQ t2 = plus_minus { $node = new LessEqualThan($node, $t2.node); }
+	)*
 	;	
 	
 plus_minus returns [ASTNode node]:
 	t1 = mult_div { $node = $t1.node; } 
 	( 
-		(PLUS t2 = mult_div { $node = new Addition($node,$t2.node); })*
-		| (MINUS t2 = mult_div { $node = new Subtraction($node,$t2.node); })* 
-	);
+		PLUS t2 = mult_div { $node = new Addition($node,$t2.node); }
+		| MINUS t2 = mult_div { $node = new Subtraction($node,$t2.node); } 
+	)*;
 	
 mult_div returns [ASTNode node]:
 	t1 = term { $node = $t1.node; }
 	( 
-		(MULT t2 = term { $node = new Multiplication($node, $t2.node); })* 
-		| (DIV t2 = term { $node = new Division($node, $t2.node); })*
-	);
+		MULT t2 = term { $node = new Multiplication($node, $t2.node); } 
+		| DIV t2 = term { $node = new Division($node, $t2.node); }
+	)*;
 	
 	
 term returns [ASTNode node]:

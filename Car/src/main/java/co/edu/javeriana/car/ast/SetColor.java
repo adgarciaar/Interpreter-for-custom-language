@@ -31,6 +31,18 @@ public class SetColor implements ASTNode {
 			System.exit(1);
 		}
 		
+		if( !(this.color.execute(symbolTable) instanceof String) ){	
+			System.out.println("Error: color incorrecto (tipo de dato incorrecto)");
+			System.exit(1);
+		}
+		
+		String pattern = "#[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]";
+		String myColor = (String)this.color.execute(symbolTable);
+		if( myColor.matches(pattern) == false ){
+			System.out.println("Error: color incorrecto");
+			System.exit(1);
+		}
+		
 		String sColor = (String)this.color.execute(symbolTable);
 		
 		float red = (float)Integer.valueOf( sColor.substring( 1, 3 ), 16 );
