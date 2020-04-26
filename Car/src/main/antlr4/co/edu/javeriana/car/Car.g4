@@ -171,6 +171,7 @@ mult_div returns [ASTNode node]:
 term returns [ASTNode node]:
 	DECIMAL_CONSTANT { $node = new Constant ( Float.parseFloat($DECIMAL_CONSTANT.text) ); }
 	| MINUS expression { $node = new NegativeExpression($expression.node); }
+	| PLUS expression { $node = new PositiveExpression($expression.node); } 
 	| BOOLEAN_CONSTANT { $node = new Constant (Boolean.parseBoolean( $BOOLEAN_CONSTANT.text )); }
 	| COLOR { $node = new Constant ( $COLOR.text ); }
 	| STRING_CONSTANT { $node = new Constant( $STRING_CONSTANT.text.substring( 1, $STRING_CONSTANT.text.length()-1 ) ); }

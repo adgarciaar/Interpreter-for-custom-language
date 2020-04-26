@@ -163,3 +163,10 @@ echo -(3+2)
 echo -----3
 echo ----3
 echo 5-(-(-2*-1))
+echo ++++42
+
+proc miNumber()
+	return 23
+end
+echo ---miNumber()
+
