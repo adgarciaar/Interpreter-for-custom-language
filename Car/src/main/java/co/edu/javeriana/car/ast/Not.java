@@ -14,6 +14,11 @@ public class Not implements ASTNode {
 	@Override
 	public Object execute(Map<String, Object> symbolTable) {
 		
+		if( this.expression.execute(symbolTable)==null ){
+			System.out.println("Error: función usada como expresión no tiene retorno");
+			System.exit(1);
+		}
+		
 		if( !(this.expression.execute(symbolTable) instanceof Boolean) ){	
 			System.out.println("Error: el operador not sólo aplica a datos booleanos");
 			System.exit(1);

@@ -29,6 +29,8 @@ public class While implements ASTNode {
 		Map<String, Object> localSymbolTable = new HashMap<String, Object>(symbolTable);
 		Map<String, Object> localDeclaredSymbol = new HashMap<String, Object>();
 		
+		boolean retorno = false;
+		Object retornoFuncion = null;
 		
 		//ejecutar el ciclo while
 		
@@ -40,15 +42,23 @@ public class While implements ASTNode {
 				//n.execute( symbolTable );
 				Object object = n.execute( localSymbolTable );
 				
-				//si la sentencia ejecutó una declaración
-				if (object instanceof List){
-					List<Character> varNameChars = (List<Character>)object;
-					String varName = "";
-					for (int i = 0; i < varNameChars.size(); i++) {
-						varName = varName + varNameChars.get(i);
+				if(object != null){
+					//si la sentencia ejecutó una declaración
+					//(esto se conoce si object es de tipo List)
+					if (object instanceof List){
+						List<Character> varNameChars = (List<Character>)object;
+						String varName = "";
+						for (int i = 0; i < varNameChars.size(); i++) {
+							varName = varName + varNameChars.get(i);
+						}
+						localDeclaredSymbol.put(varName, "Declared");
+						//System.out.println("Variable declarada localmente: "+varName);
+					}else{
+						//hay retorno
+						retorno = true;
+						retornoFuncion = object;
+						break;
 					}
-					localDeclaredSymbol.put(varName, "Declared");
-					//System.out.println("Variable declarada localmente: "+varName);
 				}
 			}
 			
@@ -69,7 +79,10 @@ public class While implements ASTNode {
 					symbolTable.put( entry.getKey(), entry.getValue() );
 				}			
 						
-			}		
+			}	
+			if( retorno == true ){
+				return retornoFuncion;
+			}
 		}
 		
 		return null;

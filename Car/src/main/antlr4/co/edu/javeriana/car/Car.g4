@@ -42,8 +42,9 @@ sentence returns [ASTNode node]:
 	| movement { $node = $movement.node; }
 	| set_color { $node = $set_color.node; }
 	| while_cycle { $node = $while_cycle.node; }
-	| procedure { $node = $procedure.node; }
-	| execute_procedure { $node = $execute_procedure.node; }
+	| function { $node = $function.node; }
+	| execute_function { $node = $execute_function.node; }
+	| sentence_retorno { $node = $sentence_retorno.node; }
 	;
 	
 
@@ -121,6 +122,11 @@ set_color returns [ASTNode node]:
 	{ $node = new SetColor( $e1.node, $e2.node, this.car ); };
 	
 	
+sentence_retorno returns [ASTNode node]:
+	RETURN expression
+	{ $node = new FunctionReturn($expression.node); }
+	;	
+	
 expression returns [ASTNode node]:
 	t1 = and_operator { $node = $t1.node; }
 	(OR t2 = and_operator { $node = new Or($node, $t2.node); } )*
@@ -164,16 +170,16 @@ mult_div returns [ASTNode node]:
 	
 term returns [ASTNode node]:
 	DECIMAL_CONSTANT { $node = new Constant ( Float.parseFloat($DECIMAL_CONSTANT.text) ); }
-	| MINUS DECIMAL_CONSTANT { $node = new Constant ( -Float.parseFloat($DECIMAL_CONSTANT.text) ); }
+	| MINUS expression { $node = new NegativeExpression($expression.node); }
 	| BOOLEAN_CONSTANT { $node = new Constant (Boolean.parseBoolean( $BOOLEAN_CONSTANT.text )); }
 	| COLOR { $node = new Constant ( $COLOR.text ); }
 	| STRING_CONSTANT { $node = new Constant( $STRING_CONSTANT.text.substring( 1, $STRING_CONSTANT.text.length()-1 ) ); }
 	| ID { $node = new VarRef($ID.text); }
-	| execute_procedure { $node = $execute_procedure.node; }
+	| execute_function { $node = $execute_function.node; }
 	| PAR_OPEN expression { $node = $expression.node; } PAR_CLOSE
 	;
 	
-procedure returns [ASTNode node]:
+function returns [ASTNode node]:
 	DECLARE_PROC t1 = ID PAR_OPEN
 	{
 		List<String> parameters = new ArrayList<String>();
@@ -187,10 +193,10 @@ procedure returns [ASTNode node]:
 	( s1 = sentence { body.add ($s1.node); } )*
 	END_PROC
 	{
-		$node = new Procedure($t1.text, parameters, body);
+		$node = new Function($t1.text, parameters, body);
 	};
 	
-execute_procedure returns [ASTNode node]:
+execute_function returns [ASTNode node]:
 	{
 		List<ASTNode> arguments = new ArrayList<ASTNode>();	
 	}
@@ -201,7 +207,7 @@ execute_procedure returns [ASTNode node]:
 	)?
 	PAR_CLOSE
 	{
-		$node = new ExecuteProcedure($ID.text, arguments);
+		$node = new ExecuteFunction($ID.text, arguments);
 	};
 	
 //---------------------------------TOKENS---------------------------------
@@ -216,7 +222,7 @@ TURN_LT: 'turn_lt';
 TURN_RT: 'turn_rt'; 
 SET_RGBA: 'set_rgba';
 
-//Declaración de variables y procedimiento
+//Declaración de variables y funciones
 
 DECLARE_VAR: 'def_var';
 DECLARE_PROC: 'proc';
@@ -233,6 +239,10 @@ END_WHILE: 'endwhile';
 //Impresión por pantalla
 
 ECHO: 'echo';
+
+//Retorno por parte de funciones
+
+RETURN: 'return';
 
 
 //OPERADORES

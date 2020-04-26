@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ExecuteProcedure implements ASTNode {
+public class ExecuteFunction implements ASTNode {
 	
 	private String name;
 	private List<ASTNode> arguments;
 
-	public ExecuteProcedure(String name, List<ASTNode> arguments) {
+	public ExecuteFunction(String name, List<ASTNode> arguments) {
 		super();
 		this.name = name;
 		this.arguments = arguments;
@@ -18,16 +18,25 @@ public class ExecuteProcedure implements ASTNode {
 	@Override
 	public Object execute(Map<String, Object> symbolTable) {
 		
-		//recuperar el objeto del procedimiento
+		//recuperar el objeto de la funcion
 		
-		Procedure procedure = (Procedure)symbolTable.get(this.name);
-		List<String> parameters = procedure.getParameters();
-		List<ASTNode> body = procedure.getBody();
+		Function function = (Function)symbolTable.get(this.name);
+		
+		if(function == null){
+			System.out.println("Error: la función "+this.name+" no se ha implementado");
+			System.exit(1);
+		}
+		
+		List<String> parameters = function.getParameters();
+		List<ASTNode> body = function.getBody();
 		
 		if( parameters.size() != this.arguments.size() ) {
 			System.out.println("Error: número de argumentos inválido para el procedimiento "+this.name);
 			System.exit(1);
 		}	
+		
+		boolean retorno = false;
+		Object retornoFuncion = null;
 		
 		//crear tabla de símbolos para manejo de variables local
 		//y mapa para almacenar las variables que se declaran localmente
@@ -50,15 +59,24 @@ public class ExecuteProcedure implements ASTNode {
 			//n.execute(localSymbolTable);
 			Object object = n.execute( localSymbolTable );
 			
-			//si la sentencia ejecutó una declaración
-			if (object instanceof List){
-				List<Character> varNameChars = (List<Character>)object;
-				String varName = "";
-				for (int j = 0; j < varNameChars.size(); j++) {
-					varName = varName + varNameChars.get(j);
+			if(object != null){
+			
+				//si la sentencia ejecutó una declaración
+				//(esto se conoce si object es de tipo List)
+				if (object instanceof List){
+					List<Character> varNameChars = (List<Character>)object;
+					String varName = "";
+					for (int j = 0; j < varNameChars.size(); j++) {
+						varName = varName + varNameChars.get(j);
+					}
+					localDeclaredSymbol.put(varName, "Declared");
+					//System.out.println("Variable declarada localmente: "+varName);
+				}else{
+					//hay retorno
+					retorno = true;
+					retornoFuncion = object;
+					break;
 				}
-				localDeclaredSymbol.put(varName, "Declared");
-				//System.out.println("Variable declarada localmente: "+varName);
 			}
 		}
 		
@@ -79,7 +97,12 @@ public class ExecuteProcedure implements ASTNode {
 					
 		}
 		
-		return null;
+		//si la función tiene retorno, entonces se retorna el valor de la expresión correspondiente
+		if( retorno == true ){			
+			return retornoFuncion;
+		}else{		
+			return null;
+		}
 	}
 
 }

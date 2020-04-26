@@ -16,6 +16,12 @@ public class And implements ASTNode {
 	@Override
 	public Object execute(Map<String, Object> symbolTable) {
 		
+		if( this.expression1.execute(symbolTable)==null ||
+				this.expression2.execute(symbolTable)==null ){
+			System.out.println("Error: función usada como expresión no tiene retorno");
+			System.exit(1);
+		}
+		
 		if( !(this.expression1.execute(symbolTable) instanceof Boolean) || 
 				!(this.expression2.execute(symbolTable) instanceof Boolean ) ){	
 			System.out.println("Error: la comparación and sólo aplica a datos booleanos");

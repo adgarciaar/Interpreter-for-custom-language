@@ -16,6 +16,12 @@ public class Addition implements ASTNode {
 	@Override
 	public Object execute( Map<String,Object> symbolTable ) {
 		
+		if( this.operand1.execute(symbolTable) == null ||
+				this.operand2.execute(symbolTable) == null ){
+			System.out.println("Error: función usada como expresión no tiene retorno");
+			System.exit(1);
+		}
+		
 		if( !(this.operand1.execute(symbolTable) instanceof Float) || 
 				!(this.operand2.execute(symbolTable) instanceof Float ) ){	
 			System.out.println("Error: las operaciones aritméticas sólo reciben datos numéricos");

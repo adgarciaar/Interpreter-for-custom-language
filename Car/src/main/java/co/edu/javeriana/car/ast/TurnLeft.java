@@ -18,6 +18,11 @@ public class TurnLeft implements ASTNode {
 	@Override
 	public Object execute(Map<String, Object> symbolTable) {
 		
+		if( this.numValue.execute(symbolTable)==null ){	
+			System.out.println("Error: función usada como expresión no tiene retorno");
+			System.exit(1);
+		}
+		
 		if( !(this.numValue.execute(symbolTable) instanceof Float) ){	
 			System.out.println("Error: el valor de giro debe ser numérico");
 			System.exit(1);

@@ -15,6 +15,12 @@ public class LessThan implements ASTNode {
 
 	@Override
 	public Object execute(Map<String, Object> symbolTable) {
+		
+		if( this.expression1.execute(symbolTable)==null ||
+				this.expression2.execute(symbolTable)==null ){
+			System.out.println("Error: función usada como expresión no tiene retorno");
+			System.exit(1);
+		}
 
 		if( !(this.expression1.execute(symbolTable) instanceof Float) || 
 				!(this.expression2.execute(symbolTable) instanceof Float ) ){	

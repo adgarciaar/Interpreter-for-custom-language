@@ -20,6 +20,15 @@ public class SetColor implements ASTNode {
 	@Override
 	public Object execute(Map<String, Object> symbolTable) {
 		
+		if( this.color.execute(symbolTable)==null ){
+			System.out.println("Error: función usada como expresión de color no tiene retorno");
+			System.exit(1);
+		}
+		if( this.transparency.execute(symbolTable)==null ){
+			System.out.println("Error: función usada como expresión de transparencia no tiene retorno");
+			System.exit(1);
+		}
+		
 		if( !(this.transparency.execute(symbolTable) instanceof Float) ){	
 			System.out.println("Error: el valor de transparencia debe ser numérico");
 			System.exit(1);
